@@ -1,6 +1,6 @@
 const MALE = "male";
 const FEMALE = "female";
-const ANY = "any gender";
+const ANY = "both_genders";
 
 const SIZE_SMALL = "small";
 const SIZE_MID = "mid";
@@ -11,6 +11,7 @@ var button = document.getElementById("btn");
 var toysTable = document.getElementById("toys_table");
 var priceField = document.getElementById("price_field");
 var ageField = document.getElementById("age_field");
+var genderSelect = document.getElementById("gender_select");
 
 button.onclick = function() {
   printToys();
@@ -217,11 +218,36 @@ function printToys() {
     tempToys = showToysByAge(ageField.value, tempToys);
   }
 
+  if(genderSelect.value) {
+    // console.log();
+    tempToys = showToysByGender(genderSelect.value, tempToys);
+  }
+
+
+  var resString = "";
+  resString += "<tr>";
+  resString += "<th>NAME</th>";
+  resString += "<th>age from:</th>";
+  resString += "<th>age to: </th>";
+  resString += "<th>price, $</th>";
+  resString += "</tr>";
+  // toysTable.innerHTML += resString;
+
   tempToys.forEach(function(toy) {
     var toyString = "\""+toy.name+ "\", age: " + toy.ageFrom + "-" + toy.ageTo+", price: $"+toy.price;
     console.log(toyString);
-    toysTable.innerHTML += "<tr> <td>" + toyString + "</td></tr>"
+    // toysTable.innerHTML += "<tr> <td>" + toyString + "</td></tr>"
+    // var resString = "";
+    resString += "<tr>";
+    resString += "<td>" +toy.name + "</td>";
+    resString += "<td>" +toy.ageFrom + "</td>";
+    resString += "<td>" +toy.ageTo + "</td>";
+    resString += "<td>" +toy.price + "</td>";
+    resString += "</tr>";
+    // toysTable.innerHTML += resString;
   });
+  toysTable.innerHTML += resString;
+
 }
 
 function showToysByAge(age, inputAr) {
@@ -249,9 +275,11 @@ function showToysByPrice(upperPrice, inputAr) {
 
 function showToysByGender(givenGender) {
   console.log("\nSHOW TOYS FOR GENDER: " + givenGender);
+  var tempArray = [];
   toys.forEach(function (toy) {
-    if(toy.getGender() === givenGender) {
-      console.log(toy);
+    if(toy.gender === givenGender) {
+      tempArray.push(toy);
     }
   });
+  return tempArray;
 }
