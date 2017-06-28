@@ -2,6 +2,10 @@ const MALE = "male";
 const FEMALE = "female";
 const ANY = "any gender";
 
+const SIZE_SMALL = "small";
+const SIZE_MID = "mid";
+const SIZE_BIG = "big";
+
 // ROOT
 function AbstractToy (name, price, gender) {
   this.name = name || "unnamed toy";
@@ -73,18 +77,21 @@ AbstractToyMachine.prototype = new AbstractToy();
 function SimpleToyMachine (name, price) {
   AbstractToyMachine.apply(this, arguments);
   this.engine = false;
+  this.size = SIZE_MID;
 }
 SimpleToyMachine.prototype = new AbstractToyMachine();
 
 function ElectroMobile(name, price, engine) {
   AbstractToyMachine.apply(this, arguments);
   this.engine = true;
+  this.size = SIZE_BIG;
 }
 ElectroMobile.prototype = new AbstractToyMachine();
 
 function ModelMachine(name, price) {
   AbstractToyMachine.apply(this, arguments);
   this.engine = false;
+  this.size = SIZE_SMALL;
 }
 ModelMachine.prototype = new AbstractToyMachine();
 
@@ -107,9 +114,23 @@ function SportBall(name, price) {
   this.material = "fake skin";
 }
 SportBall.prototype = new AbstractBall();
-//-----------------
 
+//-------------
 
+//attempt to minimize
+function inherit(P, C) {
+  P.apply(C.this);
+  C.prototype = new P();
+}
+
+function AbstractCube () {
+  this.newField = "NEW_FIELD"
+  this.gender = MALE;
+};
+inherit(AbstractToy, AbstractCube);
+
+var cube = new AbstractCube("Abs Cube", 20);
+//-------------
 
 var wallet = 150.00;
 var toys = [];
@@ -147,15 +168,20 @@ toys.sort(function age(a, b) {
   return (a.ageFrom > b.ageFrom);
 })
 // printToys();
+//
+// toys.sort(function age(a, b) {
+//   return (a.ageTo > b.ageTo);
+// });
 
-toys.sort(function age(a, b) {
-  return (a.ageTo > b.ageTo);
-});
+// toys.sort(function (a, b) {
+//   return (a.getPrice() > b.getPrice());
+// })
 
 // showToysByGender(MALE);
-// showToysByAge(14);
+showToysByAge(14);
 // showToysByPrice(15.00);
-showToysByType(AbstractFigure);
+// showToysByType(AbstractFigure);
+// printToys();
 
 var checkType = function (toy, type) {
     return(toy instanceof type);
@@ -190,7 +216,7 @@ function showToysByType(type) {
 
 function printToys() {
   toys.forEach(function(toy) {
-    console.log(toy.name+ ": " + toy.ageFrom + "-" + toy.ageTo);
+    console.log(toy.name+ ": " + toy.ageFrom + "-" + toy.ageTo+": $"+toy.price);
   });
 }
 
