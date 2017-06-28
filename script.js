@@ -6,6 +6,16 @@ const SIZE_SMALL = "small";
 const SIZE_MID = "mid";
 const SIZE_BIG = "big";
 
+//-----linking field ------
+var button = document.getElementById("btn");
+var toysTable = document.getElementById("toys_table");
+var priceField = document.getElementById("price_field");
+var ageField = document.getElementById("age_field");
+
+button.onclick = function() {
+  printToys();
+};
+
 // ROOT
 function AbstractToy (name, price, gender) {
   this.name = name || "unnamed toy";
@@ -16,17 +26,17 @@ function AbstractToy (name, price, gender) {
 }
 
 //add functions
-AbstractToy.prototype.getPrice = function () {
-  return this.price;
-}
-
-AbstractToy.prototype.getGender = function () {
-  return this.gender;
-}
-
-AbstractToy.prototype.getName = function () {
-  return this.name;
-}
+// AbstractToy.prototype.getPrice = function () {
+//   return this.price;
+// }
+//
+// AbstractToy.prototype.getGender = function () {
+//   return this.gender;
+// }
+//
+// AbstractToy.prototype.getName = function () {
+//   return this.name;
+// }
 
 AbstractToy.prototype.setupAge = function (ageTo, ageFrom) {
   this.ageTo = ageTo || 100;
@@ -35,39 +45,41 @@ AbstractToy.prototype.setupAge = function (ageTo, ageFrom) {
 
 //--------FIGURES BRANCH-----------
 
-function AbstractFigure(name, price, gender, joints) {
-  AbstractToy.apply(this, arguments);
+function AbstractFigure(name, price, joints) {
+  AbstractToy.call(this, name, price);
   this.joints = joints || false;
 }
 AbstractFigure.prototype = new AbstractToy();
 
 //---------
-function Doll (name, price) {
-  AbstractFigure.apply(this, arguments);
+function Doll (name, price, joints, eyeMovement) {
+  AbstractFigure.call(this, name, price, joints);
   this.gender = FEMALE;
-  this.joints = true;
+  this.eyeMovement = eyeMovement;
 }
 Doll.prototype = new AbstractFigure();
 
 //--------
-function ToySoldier (name, price) {
-  AbstractFigure.apply(this, arguments);
+function ToySoldier (name, price, colored) {
+  AbstractFigure.call(this, name, price);
   this.gender = MALE;
   this.joints = false;
+  this.colored = colored;
 }
 ToySoldier.prototype = new AbstractFigure();
 
 //--------
-function ActionFigure (name, price) {
-  AbstractFigure.apply(this, arguments);
+function ActionFigure (name, price, additionalParts) {
+  AbstractFigure.call(this, name, price);
   this.gender = MALE;
   this.joints = true;
+  this.additionalParts = additionalParts;
 }
 ActionFigure.prototype = new AbstractFigure();
 
 //-----------MACHINES BRANCH---------
 function AbstractToyMachine(name, price, engine) {
-  AbstractToy.apply(this, arguments);
+  AbstractToy.call(this, name, price);
   this.gender = MALE;
   this.engine = engine || false;
 }
@@ -75,61 +87,50 @@ AbstractToyMachine.prototype = new AbstractToy();
 
 //--------
 function SimpleToyMachine (name, price) {
-  AbstractToyMachine.apply(this, arguments);
+  AbstractToyMachine.call(this, name, price);
   this.engine = false;
   this.size = SIZE_MID;
 }
 SimpleToyMachine.prototype = new AbstractToyMachine();
 
-function ElectroMobile(name, price, engine) {
-  AbstractToyMachine.apply(this, arguments);
+function ElectroMobile(name, price) {
+  AbstractToyMachine.call(this, name, price);
   this.engine = true;
   this.size = SIZE_BIG;
 }
 ElectroMobile.prototype = new AbstractToyMachine();
 
-function ModelMachine(name, price) {
-  AbstractToyMachine.apply(this, arguments);
+function ModelMachine(name, price, innerStructure) {
+  AbstractToyMachine.call(this, name, price);
   this.engine = false;
   this.size = SIZE_SMALL;
+  //Can the doors be opened and the interior of the car modeled
+  this.innerStructure = innerStructure;
 }
 ModelMachine.prototype = new AbstractToyMachine();
 
 //-----------BALLS BRANCH--------
 function AbstractBall(name, price, material) {
-  AbstractToy.apply(this, arguments);
+  AbstractToy.call(this, name, price);
   this.material = material || "no material";
 }
 AbstractBall.prototype = new AbstractToy();
 
 //----------
-function RubberBall(name, price) {
-  AbstractBall.apply(this, arguments);
+function RubberBall(name, price, pictures) {
+  AbstractBall.call(this, name, price);
   this.material = "rubber";
+  this.picteres = pictures;
 }
 RubberBall.prototype = new AbstractBall();
 
-function SportBall(name, price) {
-  AbstractBall.apply(this, arguments);
+function SportBall(name, price, designedFor) {
+  AbstractBall.call(this, name, price);
   this.material = "fake skin";
+  this.designedFor = designedFor;
 }
 SportBall.prototype = new AbstractBall();
 
-//-------------
-
-//attempt to minimize
-function inherit(P, C) {
-  P.apply(C.this);
-  C.prototype = new P();
-}
-
-function AbstractCube () {
-  this.newField = "NEW_FIELD"
-  this.gender = MALE;
-};
-inherit(AbstractToy, AbstractCube);
-
-var cube = new AbstractCube("Abs Cube", 20);
 //-------------
 
 var wallet = 150.00;
@@ -140,34 +141,36 @@ var car = new SimpleToyMachine("Colored Car", 15.00, true);
 car.setupAge(10, 0);
 addToy(car);
 
-var soldier = new ToySoldier("Trooper", 10.00, MALE);
+var soldier = new ToySoldier("Trooper", 10.00, true);
 soldier.setupAge(15, 6);
 addToy(soldier);
 
-var bionycle = new ActionFigure("Megazord", 100.50, MALE);
+var bionycle = new ActionFigure("Megazord", 100.50, "megazord's sword");
 bionycle.setupAge(18, 8);
 
-var barbie = new Doll("Barbie", 25.00);
+var barbie = new Doll("Barbie", 25.00, true, false);
 barbie.setupAge(14, 6);
 addToy(barbie);
 
-var trooper = new ToySoldier("Starship Trooper", 18.99);
+var trooper = new ToySoldier("Starship Trooper", 18.99, false);
 trooper.setupAge(18, 5);
 addToy(trooper);
 
-var coloredBall = new RubberBall("Disney Ball", 5.60);
+var coloredBall = new RubberBall("Disney Ball", 5.60, true);
 coloredBall.setupAge(12, 0);
 addToy(coloredBall);
 
-var footBall = new SportBall("UEFA Ball", 30);
+var footBall = new SportBall("UEFA Ball", 30, "football");
 footBall.setupAge(18, 15);
 addToy(footBall);
+
+
 
 //operate toys
 toys.sort(function age(a, b) {
   return (a.ageFrom > b.ageFrom);
 })
-// printToys();
+// oys();
 //
 // toys.sort(function age(a, b) {
 //   return (a.ageTo > b.ageTo);
@@ -178,24 +181,10 @@ toys.sort(function age(a, b) {
 // })
 
 // showToysByGender(MALE);
-showToysByAge(14);
+// showToysByAge(14);
 // showToysByPrice(15.00);
 // showToysByType(AbstractFigure);
 // printToys();
-
-var checkType = function (toy, type) {
-    return(toy instanceof type);
-}
-
-// showToysBy(checkType(), "sdf");
-
-// function showToysBy(checker, args) {
-//   toys.forEach(function(toy) {
-//     if(checker(toy, args)) {
-//       console.log(toy);
-//     };
-//   });
-// }
 
 function addToy(toy) {
     if((wallet - toy.price) >= 0) {
@@ -215,27 +204,47 @@ function showToysByType(type) {
 }
 
 function printToys() {
-  toys.forEach(function(toy) {
-    console.log(toy.name+ ": " + toy.ageFrom + "-" + toy.ageTo+": $"+toy.price);
+  toysTable.innerHTML = "";
+
+  var tempToys = toys;
+  console.log(tempToys);
+
+  if(priceField.value) {
+    tempToys = showToysByPrice(priceField.value, tempToys);
+  }
+
+  if(ageField.value) {
+    tempToys = showToysByAge(ageField.value, tempToys);
+  }
+
+  tempToys.forEach(function(toy) {
+    var toyString = "\""+toy.name+ "\", age: " + toy.ageFrom + "-" + toy.ageTo+", price: $"+toy.price;
+    console.log(toyString);
+    toysTable.innerHTML += "<tr> <td>" + toyString + "</td></tr>"
   });
 }
 
-function showToysByAge(age) {
+function showToysByAge(age, inputAr) {
   console.log("\nTOYS FOR AGE: " + age);
-  toys.forEach(function(toy) {
+  var tempArray = [];
+  inputAr.forEach(function(toy) {
     if((age >= toy.ageFrom) && (age <= toy.ageTo)) {
-      console.log(toy);
+      tempArray.push(toy);
     }
   });
+  return tempArray;
 }
 
-function showToysByPrice(upperPrice) {
+function showToysByPrice(upperPrice, inputAr) {
   console.log("\nSHOW BY PRICE: " + upperPrice);
-  toys.forEach(function (toy) {
-    if(upperPrice >= toy.getPrice()) {
-      console.log(toy);
+  var tempArray = [];
+  inputAr.forEach(function (toy) {
+    if(upperPrice >= toy.price) {
+      // console.log(toy);
+      tempArray.push(toy);
     }
   });
+  return tempArray;
 }
 
 function showToysByGender(givenGender) {
