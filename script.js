@@ -111,7 +111,7 @@ AbstractBall.prototype = new AbstractToy();
 function RubberBall(name, price, pictures) {
   AbstractBall.call(this, name, price);
   this.material = "rubber";
-  this.picteres = pictures;
+  this.pictures = pictures;
 }
 RubberBall.prototype = new AbstractBall();
 
