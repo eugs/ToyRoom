@@ -71,15 +71,22 @@ var lizard = {
 };
 
 var chimera = mix(frog, snake, lizard);
+chimera.fireBreath = function () {
+  console.log("exterminate everything with fire!");
+}
+
 console.log(chimera);
 
-console.log("\n------\nCHIMERA CAN:");
+console.log("\n------\n\tCHIMERA CAN:");
 chimera.regenerate();
 chimera.sneak();
 chimera.crawl();
 chimera.swim();
 
-console.log("\n-------\nchimera says:");
+console.log("\n-------\n\tchimera says:");
 chimera.say();
 chimera.say1();
 chimera.say2();
+
+console.log("\n-------\n\tand finally:");
+chimera.fireBreath();
