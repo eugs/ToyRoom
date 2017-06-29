@@ -6,7 +6,7 @@ const SIZE_SMALL = "small";
 const SIZE_MID = "mid";
 const SIZE_BIG = "big";
 
-//-----linking field ------
+//-----linking fields ------
 var button = document.getElementById("btn");
 var toysTable = document.getElementById("toys_table");
 var priceField = document.getElementById("price_field");
@@ -14,10 +14,11 @@ var ageField = document.getElementById("age_field");
 var genderSelect = document.getElementById("gender_select");
 var typeSelect = document.getElementById("type_select");
 
-
 button.onclick = function() {
   printToys();
 };
+
+//--------------------------
 
 // ROOT
 function AbstractToy (name, price, gender) {
@@ -27,19 +28,6 @@ function AbstractToy (name, price, gender) {
   this.ageTo = 100;
   this.ageFrom = 0;
 }
-
-//add functions
-// AbstractToy.prototype.getPrice = function () {
-//   return this.price;
-// }
-//
-// AbstractToy.prototype.getGender = function () {
-//   return this.gender;
-// }
-//
-// AbstractToy.prototype.getName = function () {
-//   return this.name;
-// }
 
 AbstractToy.prototype.setupAge = function (ageTo, ageFrom) {
   this.ageTo = ageTo || 100;
@@ -133,61 +121,31 @@ function SportBall(name, price, designedFor) {
   this.designedFor = designedFor;
 }
 SportBall.prototype = new AbstractBall();
-
 //-------------
 
-var wallet = 150.00;
+var wallet = 250.00;
 var toys = [];
 
 // CREATE TOYS
-var car = new SimpleToyMachine("Colored Car", 15.00, true);
-car.setupAge(10, 0);
-addToy(car);
-
-var soldier = new ToySoldier("Trooper", 10.00, true);
-soldier.setupAge(15, 6);
-addToy(soldier);
-
-var bionycle = new ActionFigure("Megazord", 100.50, "megazord's sword");
-bionycle.setupAge(18, 8);
-
-var barbie = new Doll("Barbie", 25.00, true, false);
-barbie.setupAge(14, 6);
-addToy(barbie);
-
-var trooper = new ToySoldier("Starship Trooper", 18.99, false);
-trooper.setupAge(18, 5);
-addToy(trooper);
-
-var coloredBall = new RubberBall("Disney Ball", 5.60, true);
-coloredBall.setupAge(12, 0);
-addToy(coloredBall);
-
-var footBall = new SportBall("UEFA Ball", 30, "football");
-footBall.setupAge(18, 15);
-addToy(footBall);
-
-
+createToy(new SimpleToyMachine("Colored Car", 15.00, true), 0, 10);
+createToy(new ToySoldier("Trooper", 10.00, true), 6, 15);
+createToy(new Doll("Barbie", 25.00, true, false), 6, 14);
+createToy(new ToySoldier("Starship Trooper", 18.99, false), 5, 18);
+createToy(new RubberBall("Disney Ball", 5.60, true), 0, 12);
+createToy(new SportBall("UEFA Ball", 30, "football"), 15, 18);
+createToy(new Doll("Pony", 14.50, true, false), 3, 12);
+createToy(new ModelMachine("BMW model", 50.99, true), 12, 18);
+createToy(new ActionFigure("Megazord", 100.50, "sword"), 8, 18);
 
 //operate toys
 toys.sort(function age(a, b) {
   return (a.ageFrom > b.ageFrom);
 })
-// oys();
-//
-// toys.sort(function age(a, b) {
-//   return (a.ageTo > b.ageTo);
-// });
 
-// toys.sort(function (a, b) {
-//   return (a.getPrice() > b.getPrice());
-// })
-
-// showToysByGender(MALE);
-// showToysByAge(14);
-// showToysByPrice(15.00);
-// showToysByType(AbstractFigure);
-// printToys();
+function createToy(toy, ageFrom, ageTo) {
+  toy.setupAge(ageTo, ageFrom);
+  addToy(toy);
+}
 
 function addToy(toy) {
     if((wallet - toy.price) >= 0) {
@@ -200,29 +158,20 @@ function addToy(toy) {
 
 function showToysByType(type, inputAr) {
   var tempArray = [];
-  // var typeObj = Object.create(type);
-  // var p = eval("new " + type + "()");
-  // var typeObj = new window[type];
-  // console.log(typeObj);
-
   inputAr.forEach(function (toy) {
     //i know this is bad
     if(eval("toy instanceof "+ type) ) {
        tempArray.push(toy);
     }
-    // var strFunc = "if (toy instanceof " + type +
-    //   ") { tempArray.push(toy);}";
-    //   console.log(strFunc);
-    // eval(strFunc);
   });
   return tempArray;
 }
 
 function printToys() {
+  console.log("\n==========================");
   toysTable.innerHTML = "";
 
   var tempToys = toys;
-  console.log(tempToys);
 
   if(priceField.value) {
     tempToys = showToysByPrice(priceField.value, tempToys);
@@ -237,7 +186,6 @@ function printToys() {
   }
 
   if(typeSelect.value) {
-    console.log(typeSelect.value);
     tempToys = showToysByType(typeSelect.value, tempToys);
   }
 
@@ -253,12 +201,11 @@ function printToys() {
     console.log(toyString);
     resString += "<tr>";
     resString += "<td>" +toy.name + "</td>";
-    resString += "<td>" +toy.ageFrom + "- " + toy.ageTo + "</td>";
+    resString += "<td>" +toy.ageFrom + "-" + toy.ageTo + "</td>";
     resString += "<td>" +toy.price + "</td>";
     resString += "</tr>";
   });
   toysTable.innerHTML += resString;
-
 }
 
 function showToysByAge(age, inputAr) {
