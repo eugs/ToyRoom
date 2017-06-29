@@ -12,6 +12,8 @@ var toysTable = document.getElementById("toys_table");
 var priceField = document.getElementById("price_field");
 var ageField = document.getElementById("age_field");
 var genderSelect = document.getElementById("gender_select");
+var typeSelect = document.getElementById("type_select");
+
 
 button.onclick = function() {
   printToys();
@@ -196,12 +198,24 @@ function addToy(toy) {
     }
 }
 
-function showToysByType(type) {
-  toys.forEach(function (toy) {
-    if(toy instanceof type) {
-      console.log(toy);
+function showToysByType(type, inputAr) {
+  var tempArray = [];
+  // var typeObj = Object.create(type);
+  // var p = eval("new " + type + "()");
+  // var typeObj = new window[type];
+  // console.log(typeObj);
+
+  inputAr.forEach(function (toy) {
+    //i know this is bad
+    if(eval("toy instanceof "+ type) ) {
+       tempArray.push(toy);
     }
+    // var strFunc = "if (toy instanceof " + type +
+    //   ") { tempArray.push(toy);}";
+    //   console.log(strFunc);
+    // eval(strFunc);
   });
+  return tempArray;
 }
 
 function printToys() {
@@ -219,32 +233,29 @@ function printToys() {
   }
 
   if(genderSelect.value) {
-    // console.log();
     tempToys = showToysByGender(genderSelect.value, tempToys);
   }
 
+  if(typeSelect.value) {
+    console.log(typeSelect.value);
+    tempToys = showToysByType(typeSelect.value, tempToys);
+  }
 
   var resString = "";
   resString += "<tr>";
   resString += "<th>NAME</th>";
-  resString += "<th>age from:</th>";
-  resString += "<th>age to: </th>";
+  resString += "<th>age:</th>";
   resString += "<th>price, $</th>";
   resString += "</tr>";
-  // toysTable.innerHTML += resString;
 
   tempToys.forEach(function(toy) {
     var toyString = "\""+toy.name+ "\", age: " + toy.ageFrom + "-" + toy.ageTo+", price: $"+toy.price;
     console.log(toyString);
-    // toysTable.innerHTML += "<tr> <td>" + toyString + "</td></tr>"
-    // var resString = "";
     resString += "<tr>";
     resString += "<td>" +toy.name + "</td>";
-    resString += "<td>" +toy.ageFrom + "</td>";
-    resString += "<td>" +toy.ageTo + "</td>";
+    resString += "<td>" +toy.ageFrom + "- " + toy.ageTo + "</td>";
     resString += "<td>" +toy.price + "</td>";
     resString += "</tr>";
-    // toysTable.innerHTML += resString;
   });
   toysTable.innerHTML += resString;
 
@@ -273,10 +284,10 @@ function showToysByPrice(upperPrice, inputAr) {
   return tempArray;
 }
 
-function showToysByGender(givenGender) {
+function showToysByGender(givenGender, inputAr) {
   console.log("\nSHOW TOYS FOR GENDER: " + givenGender);
   var tempArray = [];
-  toys.forEach(function (toy) {
+  inputAr.forEach(function (toy) {
     if(toy.gender === givenGender) {
       tempArray.push(toy);
     }
