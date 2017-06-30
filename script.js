@@ -159,7 +159,13 @@ function addToy(toy) {
 function showToysByType(type, inputAr) {
   var tempArray = [];
   inputAr.forEach(function (toy) {
-    //i know this is bad
+      //i know this is bad
+      // if(type==="AbstractToyMachine") {
+      //   type = AbstractToyMachine;
+      //   console.log("asdfsdf" + window[type]);
+      // }
+
+      console.log("FSDF " + type);
     if(eval("toy instanceof "+ type) ) {
        tempArray.push(toy);
     }
